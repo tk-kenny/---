@@ -1,8 +1,10 @@
+export type Language = 'zh' | 'en';
+
 export enum Category {
-  AI_TECH = 'AI科技',
-  PERSONAL_GROWTH = '个人成长',
-  HOBBIES = '兴趣爱好',
-  ALL = '全部'
+  AI_TECH = 'AI_TECH',
+  PERSONAL_GROWTH = 'PERSONAL_GROWTH',
+  HOBBIES = 'HOBBIES',
+  ALL = 'ALL'
 }
 
 export interface Article {
@@ -13,7 +15,21 @@ export interface Article {
   date: string;
   readTime: string;
   imageUrl: string;
-  content?: string; // Full content for detail view (mocked)
+  content?: string; 
+}
+
+export interface Video {
+  id: string;
+  title: string;
+  category: Category;
+  date: string;
+  imageUrl: string;
+  videoUrl: string;
+  stats: {
+    likes: string;
+    comments: string;
+    shares: string;
+  };
 }
 
 export interface TimelineEvent {

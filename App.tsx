@@ -6,20 +6,23 @@ import TimelinePage from './pages/TimelinePage';
 import BlogPage from './pages/BlogPage';
 import BooksPage from './pages/BooksPage';
 import AIChatWidget from './components/AIChatWidget';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/timeline" element={<TimelinePage />} />
-          <Route path="/blog" element={<BlogPage />} />
-          <Route path="/books" element={<BooksPage />} />
-        </Routes>
-      </Layout>
-      <AIChatWidget />
-    </Router>
+    <LanguageProvider>
+      <Router>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/timeline" element={<TimelinePage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/books" element={<BooksPage />} />
+          </Routes>
+        </Layout>
+        <AIChatWidget />
+      </Router>
+    </LanguageProvider>
   );
 };
 

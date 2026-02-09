@@ -1,69 +1,111 @@
 import React from 'react';
-import { BOOKS } from '../constants';
+import { BOOKS, UI_TEXT } from '../constants';
 import { Star, ShoppingBag, BookOpen } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const BooksPage: React.FC = () => {
+  const { language } = useLanguage();
+  const t = UI_TEXT[language];
+  const books = BOOKS[language];
+
   return (
-    <div className="max-w-6xl mx-auto">
-      <div className="text-center mb-16 space-y-4">
-        <h1 className="text-4xl font-bold text-slate-900">我的书籍</h1>
-        <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-          写作是我整理思维、沉淀认知的方式。这里展示了我已出版的作品，希望能给你的成长带来一些启发。
+    <div className="max-w-6xl mx-auto py-8">
+      <div className="text-center mb-24 space-y-6">
+        <h1 className="text-6xl font-serif text-white tracking-tight">{t.books.title}</h1>
+        <p className="text-zinc-400 text-lg font-light max-w-2xl mx-auto leading-relaxed">
+          {t.books.subtitle}
         </p>
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-12">
-        {BOOKS.map((book) => (
-          <div key={book.id} className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 flex flex-col sm:flex-row gap-8 hover:shadow-xl transition-shadow duration-300">
-            {/* Book Cover */}
-            <div className="flex-shrink-0 w-full sm:w-48 mx-auto sm:mx-0 relative group">
-                <div className="absolute inset-0 bg-slate-900/10 rounded-lg transform rotate-3 translate-x-2 translate-y-2 group-hover:rotate-6 group-hover:translate-x-3 group-hover:translate-y-3 transition-transform duration-300"></div>
-                <img 
-                    src={book.coverUrl} 
-                    alt={book.title} 
-                    className="relative w-full h-auto rounded-lg shadow-lg object-cover aspect-[2/3]" 
-                />
-            </div>
+      <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
+        {books.map((book, index) => {
+          const isUpcoming = book.publishDate.includes('预计') || book.publishDate.includes('Expected') || book.publishDate.includes('2026');
+          
+          return (
+            <div key={book.id} className="group flex flex-col gap-10">
+              {/* CSS Editorial Book Cover */}
+              <div className="relative w-full max-w-sm mx-auto aspect-[2/3] bg-[#0a0a0a] rounded-sm shadow-2xl border border-white/10 transition-transform duration-700 group-hover:-translate-y-2 group-hover:shadow-white/5">
+                  
+                  {/* Spine effect */}
+                  <div className="absolute left-0 top-0 bottom-0 w-2 bg-gradient-to-r from-white/10 to-transparent z-20"></div>
+                  
+                  {/* Cover Design */}
+                  <div className="absolute inset-0 p-8 flex flex-col justify-between overflow-hidden">
+                      {/* Abstract Bg */}
+                      <div className={`absolute inset-0 opacity-20 ${index === 0 ? 'bg-[conic-gradient(at_top_right,_var(--tw-gradient-stops))] from-yellow-700 via-yellow-900 to-black' : 'bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900 via-[#0a0a0a] to-black'}`}></div>
+                      
+                      {/* Top text */}
+                      <div className="relative z-10 text-center">
+                          <span className="text-[10px] tracking-[0.3em] uppercase text-zinc-400 block mb-2">
+                             {language === 'zh' ? '陶小开 著' : 'A Book By Tao Xiaokai'}
+                          </span>
+                          <div className="w-8 h-px bg-white/20 mx-auto"></div>
+                      </div>
 
-            {/* Content */}
-            <div className="flex-1 flex flex-col justify-center text-center sm:text-left">
-              <div className="mb-2">
-                <span className="inline-block px-3 py-1 text-xs font-semibold text-blue-600 bg-blue-50 rounded-full mb-3">
-                    已出版 · {book.publishDate}
-                </span>
-                <h2 className="text-2xl font-bold text-slate-900 mb-1">{book.title}</h2>
-                <h3 className="text-lg font-medium text-slate-500 mb-4">{book.subtitle}</h3>
-              </div>
-              
-              <p className="text-slate-600 mb-6 leading-relaxed flex-1">
-                {book.description}
-              </p>
+                      {/* Main Title */}
+                      <div className="relative z-10 text-center space-y-2">
+                          <h2 className={`font-serif text-4xl leading-tight text-transparent bg-clip-text bg-gradient-to-b ${index === 0 ? 'from-amber-100 to-amber-600' : 'from-blue-100 to-blue-600'}`}>
+                            {book.title}
+                          </h2>
+                          <p className="text-xs text-zinc-400 font-sans tracking-wide uppercase px-4">
+                              {book.subtitle}
+                          </p>
+                      </div>
 
-              <div className="flex flex-col sm:flex-row items-center gap-4 mt-auto">
-                <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-xl hover:bg-slate-800 transition-colors shadow-lg shadow-slate-900/20">
-                    <ShoppingBag className="h-4 w-4" />
-                    购买实体书
-                </button>
-                <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-white text-slate-700 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
-                    <BookOpen className="h-4 w-4" />
-                    试读样章
-                </button>
+                      {/* Bottom branding */}
+                      <div className="relative z-10 flex justify-between items-end border-t border-white/10 pt-4">
+                          <span className="text-[10px] font-mono text-zinc-600">{book.publishDate}</span>
+                          <div className="w-6 h-6 border border-white/20 rounded-full flex items-center justify-center">
+                             <span className="text-[8px] text-white">TK</span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              {/* Content */}
+              <div className="flex-1 flex flex-col items-center text-center space-y-6">
+                <div>
+                   <span className={`inline-block px-2 py-1 text-[10px] font-bold tracking-widest uppercase mb-4 border ${
+                    isUpcoming ? 'text-amber-500 border-amber-500/30' : 'text-green-500 border-green-500/30'
+                  }`}>
+                      {isUpcoming ? t.books.upcoming : t.books.published}
+                  </span>
+                  <p className="text-zinc-400 leading-relaxed font-light text-sm max-w-md mx-auto">
+                    {book.description}
+                  </p>
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+                  {isUpcoming ? (
+                     <button className="w-full sm:w-48 flex items-center justify-center gap-2 px-6 py-3 border border-white/10 text-zinc-500 cursor-not-allowed text-xs font-bold tracking-widest uppercase">
+                        {t.books.not_available_btn}
+                    </button>
+                  ) : (
+                    <button className="w-full sm:w-48 flex items-center justify-center gap-2 px-6 py-3 bg-white text-black hover:bg-zinc-200 transition-colors text-xs font-bold tracking-widest uppercase">
+                        <ShoppingBag className="h-3 w-3" />
+                        {t.books.buy_btn}
+                    </button>
+                  )}
+                  
+                  <button className="w-full sm:w-48 flex items-center justify-center gap-2 px-6 py-3 border border-white/20 text-white hover:bg-white hover:text-black transition-colors text-xs font-bold tracking-widest uppercase">
+                      <BookOpen className="h-3 w-3" />
+                      {isUpcoming ? t.books.subscribe_btn : t.books.preview_btn}
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Quote Section */}
-      <div className="mt-20 bg-slate-900 rounded-3xl p-12 text-center text-white relative overflow-hidden">
-        <div className="absolute top-0 left-0 p-8 opacity-10">
-            <Star className="w-32 h-32 text-white" />
-        </div>
-        <blockquote className="relative z-10 max-w-3xl mx-auto space-y-6">
-            <p className="text-2xl md:text-3xl font-serif italic leading-relaxed">
-            "一本书就是一个世界。通过写作，我将那个时刻的认知封存，期待在未来的某个时刻与读者在思想上相遇。"
+      <div className="mt-32 border-t border-white/5 pt-20 text-center relative">
+        <Star className="w-6 h-6 text-white mx-auto mb-8 animate-pulse" />
+        <blockquote className="max-w-3xl mx-auto space-y-8">
+            <p className="text-3xl md:text-4xl font-serif italic leading-normal text-zinc-300">
+            {t.books.quote}
             </p>
-            <footer className="text-slate-400 font-medium">—— 陶小开</footer>
+            <footer className="text-xs font-bold tracking-[0.2em] text-zinc-500 uppercase">—— {language === 'zh' ? '陶小开' : 'Tao Xiaokai'}</footer>
         </blockquote>
       </div>
     </div>
